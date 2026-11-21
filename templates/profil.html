@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Profil · Buku Induk Siswa{% endblock %}
+{% block heading %}Profil{% endblock %}
+
+{% block content %}
+<form method="post" class="card" style="max-width:460px">
+  <h2>Akun</h2>
+  <div class="field"><label>Username</label><input value="{{ user.username }}" disabled></div>
+  <div class="field"><label>Nama Lengkap</label><input name="nama" value="{{ user.nama }}"></div>
+  <div class="field"><label>Password Lama</label><input name="lama" type="password" placeholder="isi hanya jika ganti password"></div>
+  <div class="field"><label>Password Baru</label><input name="baru" type="password" placeholder="min. 6 karakter"></div>
+  <button class="btn">Simpan</button>
+</form>
+{% endblock %}

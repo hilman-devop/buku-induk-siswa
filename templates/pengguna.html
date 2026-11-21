@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}User Aplikasi · Buku Induk Siswa{% endblock %}
+{% block heading %}User Aplikasi{% endblock %}
+
+{% block content %}
+<div class="grid g2">
+  <div class="card" style="padding:0;overflow:auto">
+    <table>
+      <thead><tr><th>Username</th><th>Nama</th><th>Role</th><th class="right">Aksi</th></tr></thead>
+      <tbody>
+      {% for u in users %}
+        <tr>
+          <td><b>{{ u.username }}</b>{% if u.id == session.uid %} <span class="pill">anda</span>{% endif %}</td>
+          <td>{{ u.nama }}</td>
+          <td>{{ u.role }}</td>
+          <td class="right nowrap">
+            <form method="post" action="{{ url_for('pengguna_reset', uid=u.id) }}" class="inline" style="justify-content:flex-end">
+              <input name="password" placeholder="password baru" style="width:130px;padding:5px 8px;font-size:12px">
+              <button class="btn ghost sm">Reset</button>
+            </form>
+            {% if u.id != session.uid %}
+            <form method="post" action="{{ url_for('pengguna_hapus', uid=u.id) }}" style="display:inline">
+              <button class="link" onclick="return confirm('Hapus user {{ u.username }}?')">hapus</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Tambah User</h2>
+    <form method="post">
+      <div class="field"><label>Username</label><input name="username" required></div>
+      <div class="field"><label>Nama Lengkap</label><input name="nama"></div>
+      <div class="field"><label>Password (min. 6 karakter)</label><input name="password" type="password" required></div>
+      <div class="field"><label>Role</label>
+        <select name="role"><option value="operator">Operator</option><option value="admin">Admin</option></select>
+      </div>
+      <button class="btn">Tambah User</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Data Siswa · Buku Induk Siswa{% endblock %}
+{% block heading %}Data Siswa{% endblock %}
+{% block actions %}
+  <a class="btn ghost" href="{{ url_for('export_siswa') }}">Export Excel</a>
+  <a class="btn" href="{{ url_for('siswa_baru') }}">+ Tambah Siswa</a>
+{% endblock %}
+
+{% block content %}
+<form class="searchbar" method="get">
+  <input name="q" value="{{ q }}" placeholder="Cari nama / NIS / NISN…">
+  <select name="kelas">
+    <option value="">Semua kelas</option>
+    {% for k in semua_kelas %}<option value="{{ k }}" {{ 'selected' if k == kelas }}>{{ k }}</option>{% endfor %}
+  </select>
+  <button class="btn ghost">Cari</button>
+  {% if q or kelas %}<a class="btn ghost" href="{{ url_for('siswa_list') }}">Reset</a>{% endif %}
+</form>
+
+<div class="card" style="padding:0;overflow:auto">
+  {% if rows %}
+  <table>
+    <thead>
+      <tr>
+        <th>NIS</th><th>NISN</th><th>Nama</th><th>JK</th><th>Kelas</th>
+        <th>Tahun Masuk</th><th>Status</th><th class="right">Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for s in rows %}
+      <tr>
+        <td class="nowrap">{{ s.nis }}</td>
+        <td class="nowrap muted">{{ s.nisn or '—' }}</td>
+        <td><a href="{{ url_for('siswa_detail', sid=s.id) }}">{{ s.nama }}</a></td>
+        <td>{{ s.jenis_kelamin[:1] if s.jenis_kelamin else '—' }}</td>
+        <td>{{ s.kelas or '—' }}</td>
+        <td>{{ s.tahun_masuk or '—' }}</td>
+        <td><span class="pill">{{ s.status or 'Aktif' }}</span></td>
+        <td class="right nowrap">
+          <a class="btn ghost sm" href="{{ url_for('siswa_edit', sid=s.id) }}">Edit</a>
+          <a class="btn ghost sm" href="{{ url_for('buku_induk', sid=s.id) }}">Buku Induk</a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    {% if q or kelas %}Tidak ada siswa yang cocok.{% else %}Belum ada data siswa. Mulai dari <a href="{{ url_for('import_page') }}">import Excel</a> atau <a href="{{ url_for('siswa_baru') }}">tambah manual</a>.{% endif %}
+  </div>
+  {% endif %}
+</div>
+<p class="muted" style="font-size:12.5px">{{ rows|length }} siswa ditampilkan.</p>
+{% endblock %}

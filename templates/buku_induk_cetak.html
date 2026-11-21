@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Buku Induk{% if satu %} · {{ daftar[0].s.nama }}{% endif %}{% endblock %}
+{% block heading %}Buku Induk{% endblock %}
+{% block actions %}
+  <a class="btn ghost no-print" href="{{ url_for('buku_induk_list') }}">Kembali</a>
+  <button class="btn no-print" onclick="window.print()">Cetak / Simpan PDF</button>
+{% endblock %}
+
+{% block content %}
+<div class="print-page">
+  {% for d in daftar %}{% include "_lembar.html" %}{% endfor %}
+</div>
+{% endblock %}

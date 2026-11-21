@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Buku Induk Siswa{% endblock %}</title>
+<script src="{{ url_for('static', filename='tema.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <span class="mark">BI</span>
+      <div><b>{{ S.nama_sekolah or 'Sekolah' }}</b><small>Buku Induk Siswa</small></div>
+    </div>
+    <nav>
+      <a href="{{ url_for('dashboard') }}" class="{{ 'on' if request.endpoint == 'dashboard' }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Dashboard</a>
+      <a href="{{ url_for('siswa_list') }}" class="{{ 'on' if request.endpoint in ('siswa_list','siswa_detail','siswa_baru','siswa_edit') }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5.6M17.5 20a5.6 5.6 0 0 0-2.5-4.7"/></svg>
+        Data Siswa</a>
+      <a href="{{ url_for('buku_induk_list') }}" class="{{ 'on' if request.endpoint in ('buku_induk_list','buku_induk','buku_induk_cetak') }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v18H6.5A2.5 2.5 0 0 1 4 18.5z"/><path d="M8 3v18M11.5 8h4M11.5 12h4"/></svg>
+        Buku Induk</a>
+      <a href="{{ url_for('import_page') }}" class="{{ 'on' if request.endpoint == 'import_page' }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10M8 9l4 4 4-4M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17"/></svg>
+        Import / Export</a>
+      <a href="{{ url_for('pengguna') }}" class="{{ 'on' if request.endpoint == 'pengguna' }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+        User Aplikasi</a>
+      <a href="{{ url_for('pengaturan') }}" class="{{ 'on' if request.endpoint == 'pengaturan' }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg>
+        Pengaturan</a>
+      <a href="{{ url_for('profil') }}" class="{{ 'on' if request.endpoint == 'profil' }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="10" r="2.6"/><path d="M7.5 18.5a4.8 4.8 0 0 1 9 0"/></svg>
+        Profil</a>
+    </nav>
+    <div class="side-foot">
+      <span class="who"><span class="ava">{{ (me or 'A')[0] }}</span><span>{{ me }}</span></span>
+      <a href="{{ url_for('logout') }}">Keluar</a>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <h1>{% block heading %}{% endblock %}</h1>
+      <div class="topbar-actions">
+        {% block actions %}{% endblock %}
+        <button class="theme-toggle" id="tema" type="button" aria-pressed="false" title="Ganti tema">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+        </button>
+      </div>
+    </header>
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat, m in msgs %}<div class="flash {{ cat }}">{{ m }}</div>{% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>

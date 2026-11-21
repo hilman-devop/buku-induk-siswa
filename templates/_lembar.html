@@ -1,0 +1,70 @@
+{% set s = d.s %}
+<section class="lembar">
+  <div class="kop">
+    <b>{{ S.nama_sekolah or 'NAMA SEKOLAH' }}</b>
+    <small>{% if S.alamat %}{{ S.alamat }}{% if S.kota %}, {{ S.kota }}{% endif %}{% elif S.kota %}{{ S.kota }}{% endif %}{% if S.npsn %}{% if S.alamat or S.kota %} · {% endif %}NPSN {{ S.npsn }}{% endif %}</small>
+    <div class="judul">Buku Induk Siswa</div>
+    <small>Tahun Pelajaran {{ S.tahun_ajaran or '—' }}</small>
+  </div>
+
+  <div class="ident">
+    <span>Nomor Induk</span><span>:</span><span>{{ s.nis }}</span>
+    <span>NISN</span><span>:</span><span>{{ s.nisn or '—' }}</span>
+    <span>Nama Lengkap</span><span>:</span><span><b>{{ s.nama }}</b></span>
+    <span>Jenis Kelamin</span><span>:</span><span>{{ s.jenis_kelamin or '—' }}</span>
+    <span>Tempat, Tanggal Lahir</span><span>:</span><span>{{ s.tempat_lahir or '—' }}{% if s.tanggal_lahir %}, {{ s.tanggal_lahir|tgl }}{% endif %}</span>
+    <span>Agama</span><span>:</span><span>{{ s.agama or '—' }}</span>
+    <span>Alamat</span><span>:</span><span>{{ s.alamat or '—' }}</span>
+    <span>No. HP</span><span>:</span><span>{{ s.no_hp or '—' }}</span>
+    <span>Kelas</span><span>:</span><span>{{ s.kelas or '—' }}</span>
+    <span>Tahun Masuk</span><span>:</span><span>{{ s.tahun_masuk or '—' }}</span>
+    <span>Status</span><span>:</span><span>{{ s.status or 'Aktif' }}</span>
+  </div>
+
+  <div class="sub">Data Orang Tua / Wali</div>
+  <div class="ident">
+    <span>Nama Ayah</span><span>:</span><span>{{ s.nama_ayah or '—' }}</span>
+    <span>Pekerjaan Ayah</span><span>:</span><span>{{ s.pekerjaan_ayah or '—' }}</span>
+    <span>Nama Ibu</span><span>:</span><span>{{ s.nama_ibu or '—' }}</span>
+    <span>Pekerjaan Ibu</span><span>:</span><span>{{ s.pekerjaan_ibu or '—' }}</span>
+  </div>
+
+  <div class="sub">Nilai Mata Pelajaran</div>
+  {% if d.per_sem %}
+  <table>
+    <thead><tr><th>Mata Pelajaran</th><th class="num">Semester</th><th class="num">Nilai</th></tr></thead>
+    <tbody>
+    {% for sem, items in d.per_sem.items() %}
+      {% for n in items %}
+      <tr>
+        <td>{{ n.mapel }}</td>
+        <td class="num">{{ sem }}</td>
+        <td class="num">{{ '%.0f'|format(n.nilai) if n.nilai is not none else '—' }}</td>
+      </tr>
+      {% endfor %}
+    {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr><th colspan="2">Rata-rata</th><th class="num">{{ '%.2f'|format(d.rata) if d.rata else '—' }}</th></tr>
+    </tfoot>
+  </table>
+  {% else %}
+  <p class="muted" style="font-size:12.5px">Belum ada nilai tercatat.</p>
+  {% endif %}
+
+  {% if s.catatan %}<div class="sub">Catatan</div><p style="font-size:12.5px;margin:0">{{ s.catatan }}</p>{% endif %}
+
+  <div class="ttd">
+    <div>
+      <div>Orang Tua / Wali</div>
+      <div class="space"></div>
+      <div>( ................................ )</div>
+    </div>
+    <div>
+      <div>{{ S.kota or '................' }}, ................... </div>
+      <div>Kepala Sekolah</div>
+      <div class="space"></div>
+      <div><b>{{ S.kepala_sekolah or '( ................................ )' }}</b></div>
+    </div>
+  </div>
+</section>

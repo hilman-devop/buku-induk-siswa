@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if siswa else 'Tambah' }} Siswa · Buku Induk Siswa{% endblock %}
+{% block heading %}{{ 'Edit Data Siswa' if siswa else 'Tambah Siswa' }}{% endblock %}
+{% block actions %}<a class="btn ghost" href="{{ url_for('siswa_list') }}">Kembali</a>{% endblock %}
+
+{% block content %}
+{% set s = siswa %}
+<form method="post">
+  <div class="card">
+    <h2>Identitas Siswa</h2>
+    <div class="row">
+      <div class="field"><label>NIS / Nomor Induk *</label><input name="nis" value="{{ s.nis if s else '' }}" required></div>
+      <div class="field"><label>NISN</label><input name="nisn" value="{{ s.nisn if s else '' }}"></div>
+      <div class="field" style="grid-column:span 2"><label>Nama Lengkap *</label><input name="nama" value="{{ s.nama if s else '' }}" required></div>
+      <div class="field"><label>Jenis Kelamin</label>
+        <select name="jenis_kelamin">
+          <option value="">—</option>
+          <option {{ 'selected' if s and s.jenis_kelamin == 'Laki-laki' }}>Laki-laki</option>
+          <option {{ 'selected' if s and s.jenis_kelamin == 'Perempuan' }}>Perempuan</option>
+        </select>
+      </div>
+      <div class="field"><label>Tempat Lahir</label><input name="tempat_lahir" value="{{ s.tempat_lahir if s else '' }}"></div>
+      <div class="field"><label>Tanggal Lahir</label><input type="date" name="tanggal_lahir" value="{{ s.tanggal_lahir if s else '' }}"></div>
+      <div class="field"><label>Agama</label>
+        {% set ag = s.agama if s else '' %}
+        <select name="agama">
+          <option value="">—</option>
+          {% for a in ['Islam','Kristen','Katolik','Hindu','Buddha','Konghucu'] %}
+          <option {{ 'selected' if ag == a }}>{{ a }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field"><label>Kelas</label><input name="kelas" value="{{ s.kelas if s else '' }}" placeholder="7A"></div>
+      <div class="field"><label>Tahun Masuk</label><input name="tahun_masuk" value="{{ s.tahun_masuk if s else '' }}" placeholder="2026"></div>
+      <div class="field"><label>No. HP / WA</label><input name="no_hp" value="{{ s.no_hp if s else '' }}"></div>
+      <div class="field"><label>Status</label>
+        {% set st = s.status if s else 'Aktif' %}
+        <select name="status">
+          {% for x in ['Aktif','Lulus','Pindah','Keluar'] %}<option {{ 'selected' if st == x }}>{{ x }}</option>{% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Alamat</label><textarea name="alamat" rows="2">{{ s.alamat if s else '' }}</textarea></div>
+    <div class="field"><label>Catatan</label><textarea name="catatan" rows="2">{{ s.catatan if s else '' }}</textarea></div>
+  </div>
+
+  <div class="card">
+    <h2>Data Orang Tua</h2>
+    <div class="row">
+      <div class="field"><label>Nama Ayah</label><input name="nama_ayah" value="{{ s.nama_ayah if s else '' }}"></div>
+      <div class="field"><label>Pekerjaan Ayah</label><input name="pekerjaan_ayah" value="{{ s.pekerjaan_ayah if s else '' }}"></div>
+      <div class="field"><label>Nama Ibu</label><input name="nama_ibu" value="{{ s.nama_ibu if s else '' }}"></div>
+      <div class="field"><label>Pekerjaan Ibu</label><input name="pekerjaan_ibu" value="{{ s.pekerjaan_ibu if s else '' }}"></div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn">Simpan</button>
+    <a class="btn ghost" href="{{ url_for('siswa_list') }}">Batal</a>
+    {% if s %}
+    <button class="btn danger" formaction="{{ url_for('siswa_hapus', sid=s.id) }}" formmethod="post"
+            onclick="return confirm('Hapus data siswa ini beserta seluruh nilainya?')">Hapus</button>
+    {% endif %}
+  </div>
+</form>
+{% endblock %}

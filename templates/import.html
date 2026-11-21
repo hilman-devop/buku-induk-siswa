@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Import / Export · Buku Induk Siswa{% endblock %}
+{% block heading %}Import / Export Excel{% endblock %}
+
+{% block content %}
+<div class="grid g2">
+  <div class="card">
+    <h2>1. Export template Excel</h2>
+    <p class="muted" style="font-size:13px;margin-top:-4px">File yang diunduh sudah berisi data yang ada, jadi bisa langsung diisi/diperbaiki lalu di-import kembali.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+      <a class="btn" href="{{ url_for('export_siswa') }}">Data Siswa (.xlsx)</a>
+    </div>
+    <form method="get" action="{{ url_for('export_nilai') }}" class="inline">
+      <div class="field" style="flex:0 0 140px">
+        <label>Semester</label>
+        <select name="semester">
+          {% for x in ['1','2','3','4','5','6'] %}<option>{{ x }}</option>{% endfor %}
+        </select>
+      </div>
+      <button class="btn">Data Nilai (.xlsx)</button>
+    </form>
+    <p class="muted" style="font-size:12px;margin-bottom:0">Template nilai berisi baris {{ contoh.jumlah }} siswa × {{ contoh.mapel|length }} mapel ({{ contoh.mapel|join(', ') }}).</p>
+  </div>
+
+  <div class="card">
+    <h2>2. Import file Excel</h2>
+    <form method="post" enctype="multipart/form-data" style="margin-bottom:16px">
+      <input type="hidden" name="kind" value="siswa">
+      <div class="field"><label>File data siswa (.xlsx)</label><input type="file" name="file" accept=".xlsx" required></div>
+      <button class="btn">Import Data Siswa</button>
+      <p class="muted" style="font-size:12px;margin:6px 0 0">Kunci: <b>NIS</b>. NIS yang sudah ada akan diperbarui, yang baru akan ditambahkan.</p>
+    </form>
+    <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+    <form method="post" enctype="multipart/form-data">
+      <input type="hidden" name="kind" value="nilai">
+      <div class="field"><label>File data nilai (.xlsx)</label><input type="file" name="file" accept=".xlsx" required></div>
+      <button class="btn">Import Data Nilai</button>
+      <p class="muted" style="font-size:12px;margin:6px 0 0">Kolom wajib: NIS, MAPEL, SEMESTER, NILAI. NIS harus sudah ada di data siswa.</p>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Catatan format</h2>
+  <ul class="muted" style="font-size:13px;line-height:1.8;margin:0;padding-left:18px">
+    <li>Baris pertama file harus berisi judul kolom. Nama kolom dibaca fleksibel (mis. <b>NO INDUK</b> = <b>NIS</b>, <b>JK</b> = <b>JENIS KELAMIN</b>).</li>
+    <li>Tanggal lahir boleh format <b>2026-01-13</b>, <b>13/01/2026</b>, atau format tanggal Excel.</li>
+    <li>Baris tanpa NIS/Nama dilewati, tidak menggagalkan seluruh import.</li>
+    <li>Data lama tidak terhapus oleh import — hanya ditambah atau diperbarui.</li>
+  </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Tidak ditemukan · Buku Induk Siswa{% endblock %}
+{% block heading %}404 — Data tidak ditemukan{% endblock %}
+{% block content %}
+<div class="card">
+  <p>Halaman atau data yang Anda cari tidak ada.</p>
+  <a class="btn" href="{{ url_for('dashboard') }}">Ke Dashboard</a>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Buku Induk · Buku Induk Siswa{% endblock %}
+{% block heading %}Buku Induk{% endblock %}
+{% block actions %}
+  <a class="btn ghost" href="{{ url_for('export_siswa') }}">Export Excel</a>
+  <a class="btn" target="_blank" href="{{ url_for('buku_induk_cetak', kelas=kelas) }}">Cetak / Simpan PDF{% if kelas %} ({{ kelas }}){% endif %}</a>
+{% endblock %}
+
+{% block content %}
+<form class="searchbar" method="get">
+  <select name="kelas">
+    <option value="">Semua kelas</option>
+    {% for k in semua_kelas %}<option value="{{ k }}" {{ 'selected' if k == kelas }}>{{ k }}</option>{% endfor %}
+  </select>
+  <button class="btn ghost">Filter</button>
+</form>
+
+<div class="card" style="padding:0;overflow:auto">
+  {% if rows %}
+  <table>
+    <thead>
+      <tr><th>No</th><th>Nomor Induk</th><th>Nama</th><th>Kelas</th><th class="num">Nilai Tersimpan</th><th class="right">Aksi</th></tr>
+    </thead>
+    <tbody>
+    {% for s in rows %}
+      <tr>
+        <td class="muted">{{ loop.index }}</td>
+        <td class="nowrap">{{ s.nis }}</td>
+        <td>{{ s.nama }}</td>
+        <td>{{ s.kelas or '—' }}</td>
+        <td class="num">{{ s.jml_nilai }}</td>
+        <td class="right nowrap"><a class="btn ghost sm" href="{{ url_for('buku_induk', sid=s.id) }}">Buka</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">Belum ada siswa untuk dicetak.</div>
+  {% endif %}
+</div>
+<p class="muted" style="font-size:12.5px">Urutan cetak mengikuti nomor induk. Pada dialog cetak pilih <b>Save as PDF</b> untuk menyimpan file PDF.</p>
+{% endblock %}

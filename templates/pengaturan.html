@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Pengaturan · Buku Induk Siswa{% endblock %}
+{% block heading %}Pengaturan{% endblock %}
+
+{% block content %}
+<form method="post" class="card">
+  <h2>Identitas Sekolah</h2>
+  <div class="row">
+    <div class="field" style="grid-column:span 2"><label>Nama Sekolah</label><input name="nama_sekolah" value="{{ S.nama_sekolah or '' }}"></div>
+    <div class="field"><label>NPSN</label><input name="npsn" value="{{ S.npsn or '' }}"></div>
+    <div class="field"><label>Kota / Kabupaten</label><input name="kota" value="{{ S.kota or '' }}"></div>
+    <div class="field" style="grid-column:span 2"><label>Alamat</label><input name="alamat" value="{{ S.alamat or '' }}"></div>
+    <div class="field"><label>Kepala Sekolah</label><input name="kepala_sekolah" value="{{ S.kepala_sekolah or '' }}"></div>
+    <div class="field"><label>Tahun Pelajaran</label><input name="tahun_ajaran" value="{{ S.tahun_ajaran or '' }}" placeholder="2025/2026"></div>
+  </div>
+  <div class="field"><label>Daftar Mata Pelajaran (pisahkan dengan koma)</label>
+    <textarea name="mapel" rows="2">{{ S.mapel or '' }}</textarea>
+    <small class="muted" style="font-size:11.5px">Dipakai untuk template export nilai dan pilihan mapel.</small>
+  </div>
+  <button class="btn">Simpan Pengaturan</button>
+</form>
+{% endblock %}

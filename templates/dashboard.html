@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Buku Induk Siswa{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div>
+    <span class="eyebrow">Tahun Pelajaran {{ S.tahun_ajaran or '—' }}{% if S.kota %} · {{ S.kota }}{% endif %}</span>
+    <h2>Selamat datang, {{ me }}</h2>
+    <p>{{ stat.siswa }} siswa · {{ stat.kelas }} kelas · {{ stat.nilai }} nilai tercatat</p>
+  </div>
+  <div class="hero-actions">
+    <a class="btn" href="{{ url_for('siswa_baru') }}">+ Tambah Siswa</a>
+    <a class="btn ghost" href="{{ url_for('buku_induk_cetak') }}">Cetak Buku Induk</a>
+  </div>
+</section>
+
+<div class="grid g4" style="margin-bottom:20px">
+  <div class="stat dark">
+    <span class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5.6M17.5 20a5.6 5.6 0 0 0-2.5-4.7"/></svg></span>
+    <span>Total Siswa</span><b>{{ stat.siswa }}</b>
+    <small>{{ stat.laki }} laki-laki · {{ stat.perempuan }} perempuan</small>
+  </div>
+  <div class="stat">
+    <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></span>
+    <span>Kelas</span><b>{{ stat.kelas }}</b><small>rombel terisi</small>
+  </div>
+  <div class="stat">
+    <span class="ico"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span>
+    <span>Nilai Tersimpan</span><b>{{ stat.nilai }}</b><small>seluruh semester</small>
+  </div>
+  <div class="stat">
+    <span class="ico"><svg viewBox="0 0 24 24"><path d="M3 16.5 9 10l4 4 8-8"/><path d="M15 6h6v6"/></svg></span>
+    <span>Rata-rata Nilai</span><b>{{ '%.1f'|format(stat.rata) if stat.rata else '—' }}</b>
+    <small>semua semester</small>
+  </div>
+</div>
+
+<div class="grid g2">
+  <div class="card">
+    <h2>Sebaran Siswa per Kelas</h2>
+    {% if kelas %}
+      {% set maks = kelas|map(attribute='c')|max %}
+      {% for k in kelas %}
+      <div class="bar-row">
+        <span class="nm">{{ k.kelas or '—' }}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:{{ (k.c / maks * 100)|round(0,'floor')|int }}%"></div></div>
+        <b>{{ k.c }}</b>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="muted">Belum ada data siswa.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Siswa Terbaru</h2>
+    {% if terbaru %}
+    <table>
+      <thead><tr><th>NIS</th><th>Nama</th><th>Kelas</th></tr></thead>
+      <tbody>
+      {% for s in terbaru %}
+        <tr>
+          <td class="nowrap num">{{ s.nis }}</td>
+          <td><a href="{{ url_for('siswa_detail', sid=s.id) }}">{{ s.nama }}</a></td>
+          <td><span class="pill">{{ s.kelas or '—' }}</span></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p class="muted">Belum ada siswa. <a href="{{ url_for('siswa_baru') }}">Tambah manual</a> atau <a href="{{ url_for('import_page') }}">import Excel</a>.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <h2>Alur Kerja</h2>
+  <ol class="steps">
+    <li><a href="{{ url_for('export_siswa') }}">Export template Excel data siswa</a> (atau <a href="{{ url_for('export_nilai') }}">template nilai</a>) — sudah berisi data yang ada.</li>
+    <li>Isi file Excel di komputer: identitas siswa dan nilai.</li>
+    <li><a href="{{ url_for('import_page') }}">Import</a> file tersebut ke aplikasi — data masuk dalam hitungan detik.</li>
+    <li><a href="{{ url_for('buku_induk_cetak') }}">Cetak buku induk</a> urut nomor induk, atau simpan sebagai PDF.</li>
+  </ol>
+</div>
+{% endblock %}

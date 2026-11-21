@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}{{ siswa.nama }} · Buku Induk Siswa{% endblock %}
+{% block heading %}{{ siswa.nama }}{% endblock %}
+{% block actions %}
+  <a class="btn ghost" href="{{ url_for('siswa_edit', sid=siswa.id) }}">Edit</a>
+  <a class="btn" href="{{ url_for('buku_induk', sid=siswa.id) }}">Lihat Buku Induk</a>
+{% endblock %}
+
+{% block content %}
+<div class="grid g2">
+  <div class="card">
+    <h2>Identitas</h2>
+    <table>
+      <tbody>
+        <tr><th style="width:150px">NIS</th><td>{{ siswa.nis }}</td></tr>
+        <tr><th>NISN</th><td>{{ siswa.nisn or '—' }}</td></tr>
+        <tr><th>Jenis Kelamin</th><td>{{ siswa.jenis_kelamin or '—' }}</td></tr>
+        <tr><th>Tempat / Tgl Lahir</th><td>{{ siswa.tempat_lahir or '—' }}{% if siswa.tanggal_lahir %}, {{ siswa.tanggal_lahir|tgl }}{% endif %}</td></tr>
+        <tr><th>Agama</th><td>{{ siswa.agama or '—' }}</td></tr>
+        <tr><th>Kelas</th><td>{{ siswa.kelas or '—' }}</td></tr>
+        <tr><th>Tahun Masuk</th><td>{{ siswa.tahun_masuk or '—' }}</td></tr>
+        <tr><th>Status</th><td><span class="pill">{{ siswa.status or 'Aktif' }}</span></td></tr>
+        <tr><th>No. HP</th><td>{{ siswa.no_hp or '—' }}</td></tr>
+        <tr><th>Alamat</th><td>{{ siswa.alamat or '—' }}</td></tr>
+        <tr><th>Catatan</th><td>{{ siswa.catatan or '—' }}</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h2>Orang Tua</h2>
+    <table>
+      <tbody>
+        <tr><th style="width:150px">Nama Ayah</th><td>{{ siswa.nama_ayah or '—' }}</td></tr>
+        <tr><th>Pekerjaan Ayah</th><td>{{ siswa.pekerjaan_ayah or '—' }}</td></tr>
+        <tr><th>Nama Ibu</th><td>{{ siswa.nama_ibu or '—' }}</td></tr>
+        <tr><th>Pekerjaan Ibu</th><td>{{ siswa.pekerjaan_ibu or '—' }}</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Nilai</h2>
+  {% if per_sem %}
+    {% for sem, items in per_sem.items() %}
+    <div class="sub" style="margin-top:8px">Semester {{ sem }}</div>
+    <table>
+      <thead><tr><th>Mata Pelajaran</th><th class="num">Nilai</th><th class="right">Aksi</th></tr></thead>
+      <tbody>
+      {% for n in items %}
+        <tr>
+          <td>{{ n.mapel }}</td>
+          <td class="num">{{ '%.0f'|format(n.nilai) if n.nilai is not none else '—' }}</td>
+          <td class="right">
+            <form method="post" action="{{ url_for('nilai_hapus', nid=n.id) }}">
+              <button class="link">hapus</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% endfor %}
+  {% else %}
+    <p class="muted">Belum ada nilai. Tambahkan di bawah, atau pakai <a href="{{ url_for('import_page') }}">import Excel nilai</a>.</p>
+  {% endif %}
+
+  <form class="inline" method="post" action="{{ url_for('nilai_simpan', sid=siswa.id) }}" style="margin-top:14px">
+    <div class="field" style="flex:2">
+      <label>Mata Pelajaran</label>
+      <input name="mapel" list="mapel-list" required>
+      <datalist id="mapel-list">{% for m in mapel %}<option value="{{ m }}">{% endfor %}</datalist>
+    </div>
+    <div class="field" style="flex:0 0 130px">
+      <label>Semester</label>
+      <select name="semester">
+        {% for x in ['1','2','3','4','5','6'] %}<option>{{ x }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field" style="flex:0 0 110px">
+      <label>Nilai</label>
+      <input name="nilai" inputmode="decimal" required>
+    </div>
+    <button class="btn">Simpan Nilai</button>
+  </form>
+</div>
+{% endblock %}
