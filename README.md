@@ -1,30 +1,57 @@
-# Aplikasi Buku Induk Siswa
+# Buku Induk Siswa
 
-> Pengganti buku induk manual sekolah: import massal dari Excel, nilai per semester, dan cetak/PDF per siswa.
+![Flask](https://img.shields.io/badge/Flask-2f81f7?style=flat) ![Python](https://img.shields.io/badge/Python-2f81f7?style=flat) ![SQLite](https://img.shields.io/badge/SQLite-2f81f7?style=flat) ![openpyxl](https://img.shields.io/badge/openpyxl-2f81f7?style=flat) ![Jinja2](https://img.shields.io/badge/Jinja2-2f81f7?style=flat)
 
-## ✨ Fitur
+> Aplikasi pengganti buku induk manual sekolah yang berjalan lokal tanpa server terpisah.
+
+## Tentang proyek
+
+Aplikasi pengganti buku induk manual sekolah yang berjalan lokal tanpa server terpisah. Dokumentasi ini dibuat sebagai panduan singkat untuk memahami ruang lingkup proyek, menjalankannya secara lokal, dan membaca batasan penggunaannya.
+
+## Fitur utama
 
 - Import massal Excel dengan upsert berbasis NIS
-- Nilai per semester
-- Cetak / ekspor PDF per siswa
-- Dashboard statistik
-- Multi-user
-- Dijalankan lokal tanpa server terpisah
+- Data identitas dan nilai per semester
+- Dashboard statistik dan pencarian siswa
+- Cetak atau ekspor laporan per siswa
+- Penyimpanan lokal berbasis SQLite
 
-## 🛠 Tech Stack
+## Teknologi
 
-"Flask" "SQLite" "openpyxl" "Jinja2"
+- Flask
+- Python
+- SQLite
+- openpyxl
+- Jinja2
 
-## 🚀 Menjalankan
+## Menjalankan secara lokal
 
-```
-pip install -r requirements.txt
+Prasyarat dan konfigurasi dapat berbeda menurut sistem operasi. Contoh langkah utama:
+
+```bash
 python app.py
-buka http://127.0.0.1:5000
 ```
 
-## 📌 Catatan
+## Struktur dan pengembangan
 
-Proyek ini merupakan bagian dari portofolio pribadi. Kode disusun untuk kebutuhan nyata,
-bukan sekadar demo, sehingga sebagian konfigurasi spesifik lingkungan mungkin perlu
-disesuaikan sebelum dijalankan.
+Mulai dari entry point dan folder konfigurasi proyek. Pisahkan credential lokal dari source code, tambahkan test untuk perubahan penting, dan gunakan environment variable untuk konfigurasi deployment.
+
+## Keamanan
+
+- Jangan commit API key, password, token, session ID, atau data pribadi.
+- Gunakan file environment lokal dan contoh konfigurasi tanpa nilai rahasia.
+- Uji perubahan pada environment development sebelum deployment.
+
+## Status
+
+Proyek ini merupakan bagian dari portofolio **Hilman Arifin Ilham** dan dapat dikembangkan sesuai kebutuhan penggunaan.
+
+> **Catatan:** File runtime seperti `data/secret.key` tidak termasuk repository publik. Buat konfigurasi lokal sesuai kebutuhan sebelum menjalankan aplikasi.
+
+## Lisensi
+
+Belum ada lisensi open-source yang dinyatakan di repository ini. Hubungi pemilik repository sebelum menggunakan ulang atau mendistribusikan kode.
+
+---
+
+Dibuat oleh [Hilman Arifin Ilham](https://github.com/hilman-devop).
