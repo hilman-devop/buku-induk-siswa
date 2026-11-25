@@ -4,6 +4,12 @@
 
 > Aplikasi pengganti buku induk manual sekolah yang berjalan lokal tanpa server terpisah.
 
+## Preview
+
+![Dashboard kosong Buku Induk Siswa](screenshots/portfolio-preview.jpg)
+
+*Screenshot dashboard lokal dengan database baru yang terisolasi; 0 siswa dan 0 nilai. Tidak ada data siswa atau data demo.*
+
 ## Tentang proyek
 
 Aplikasi pengganti buku induk manual sekolah yang berjalan lokal tanpa server terpisah. Dokumentasi ini dibuat sebagai panduan singkat untuk memahami ruang lingkup proyek, menjalankannya secara lokal, dan membaca batasan penggunaannya.
